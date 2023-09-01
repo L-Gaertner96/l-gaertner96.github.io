@@ -1,0 +1,40 @@
+body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to bottom, #87CEEB, #32CD32);
+}
+
+.card-text-poster{
+    text-align: left;
+}
+
+.card {
+    background: transparent;
+    border: none; 
+    border-radius: 0; 
+    margin-bottom: 1.25rem; 
+    margin-top: 10%;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: none;
+    padding: 0.5rem 1rem;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-text-poster {
+    margin-bottom: 0.5rem;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Thread - {{ post.title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Pawsome Pets</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarWithDropdown" aria-controls="navbarWithDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse show" id="navbarWithDropdown">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">All Animals</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/dogs">Dogs</a></li>
+                            <li><a class="dropdown-item" href="/cats">Cats</a></li>
+                            <li><a class="dropdown-item" href="/birds">Birds</a></li>
+                            <li><a class="dropdown-item" href="/reptiles">Reptiles</a></li>
+                            <li><a class="dropdown-item" href="/rodents">Rodents</a></li>
+                            <li><a class="dropdown-item" href="/livestock">Livestock</a></li>
+                            <li><a class="dropdown-item" href="/exotics">Exotics</a></li>
+                        </ul>
+                    </li>
+                    {% if session.user_id %}
+                        <li class="nav-item">
+                            <span class="nav-link">Welcome, {{ session.username }}!</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/{{ category }}">{{ category.capitalize() }}</a></li>
+                <li class="breadcrumb-item"><a href="/{{ category }}/{{ subcategory }}">{{ subcategory.replace("_", " ").capitalize() }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ post.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">{{ post.title }}</h2>
+                <div>
+                    {% if session.user_id == post.users_id %}
+                        <a href="{{ url_for('edit_post', category=category, subcategory=subcategory, post_id=post.id) }}" class="btn btn-sm btn-primary me-2">Edit</a>
+                        <form method="post" action="{{ url_for('delete_post', category=category, subcategory=subcategory, post_id=post.id) }}" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-text-poster">Posted by: {{ post.username }}</p>
+                <p class="card-text">{{ post.body }}</p>
+            </div>
+        </div>
+        
+        
+        <h2>Comments:</h2>
+        <ul class="list-group">
+            {% for comment in comments %}
+                <li class="list-group-item">
+                    <p class="mb-1">{{ comment.content }}</p>
+                    <small class="text-muted">Posted by: {{ comment.username }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <form method="post" action="/{{category}}/{{subcategory}}/{{post.id}}/new_comment" class="mt-3">
+            <label for="content">Reply to this thread:</label>
+            <textarea id="content" name="content" rows="5" cols="40" class="form-control" required></textarea>
+            <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
+        </form>
+        
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
